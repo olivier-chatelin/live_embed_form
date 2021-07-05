@@ -20,7 +20,7 @@ class RecipeType extends AbstractType
                 'class'=>Category::class,
                 'choice_label'=>'title',
             ])
-//            ->add('step')
+//            ->add('steps')
 //            ->add('ingredients')
         ;
     }
