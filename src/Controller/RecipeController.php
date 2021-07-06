@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Recipe;
+use App\Entity\Step;
 use App\Form\RecipeType;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,6 +20,11 @@ class RecipeController extends AbstractController
     public function index(Request $request, EntityManagerInterface $entityManager, CategoryRepository $categoryRepository): Response
     {
         $recipe = new Recipe();
+        for ($i = 0 ; $i < 4; $i++) {
+            $step = new Step();
+            $recipe->addStep($step);
+        }
+
         $form = $this->createForm(RecipeType::class,$recipe);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
