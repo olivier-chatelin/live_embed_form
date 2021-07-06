@@ -6,6 +6,7 @@ use App\Entity\Recipe;
 use App\Entity\Step;
 use App\Form\RecipeType;
 use App\Repository\CategoryRepository;
+use App\Repository\IngredientRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,14 +18,9 @@ class RecipeController extends AbstractController
     /**
      * @Route("/", name="recipe")
      */
-    public function index(Request $request, EntityManagerInterface $entityManager, CategoryRepository $categoryRepository): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, CategoryRepository $categoryRepository, IngredientRepository $ingredientRepository): Response
     {
         $recipe = new Recipe();
-        for ($i = 0 ; $i < 4; $i++) {
-            $step = new Step();
-            $recipe->addStep($step);
-        }
-
         $form = $this->createForm(RecipeType::class,$recipe);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -32,6 +28,13 @@ class RecipeController extends AbstractController
             $category = $categoryRepository->findOneByTitle($categoryRecorded->getTitle());
             if ($category) {
                 $recipe->setCategory($category);
+            }
+            foreach ($recipe->getIngredients() as $ingredientRecorded) {
+                $ingredient = $ingredientRepository->findOneByName($ingredientRecorded->getName());
+                if ($ingredient) {
+                    $recipe->removeIngredient($ingredientRecorded);
+                    $recipe->addIngredient($ingredient);
+                }
             }
             $entityManager->persist($recipe);
             $entityManager->flush();

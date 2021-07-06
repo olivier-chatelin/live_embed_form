@@ -1,13 +1,22 @@
 {% extends 'base.html.twig' %}
 {% form_theme form 'bootstrap_4_layout.html.twig' %}
 {% block title %}Hello RecipeController!{% endblock %}
+       {% block javascripts %}
+           {{ parent() }}
+           {{ encore_entry_script_tags('form') }}
+       {% endblock %}
 
 {% block body %}
     <div class="container">
     {{ form_start(form) }}
-        {{ form_widget(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.category) }}
+        <h3>Ingredients</h3>
+        <ul class="ingredients" id="ingredient-container" data-prototype="{{ form_widget(form.ingredients.vars.prototype)|e('html_attr') }}"></ul>
+        <button type="button" id="button-ingredient" class="add_item_link btn btn-primary" data-collection-holder-class="ingredients">Ajouter un Ingrédient</button>
         <button class="btn btn-primary">ok</button>
-    {{ form_start(form) }}
+    {{ form_end(form) }}
     </div>
 
 {% endblock %}

@@ -18,11 +18,11 @@ class RecipeType extends AbstractType
             ->add('name')
             ->add('description')
             ->add('category', CategoryType::class )
-            ->add('steps', CollectionType::class,[
-                'entry_type'=>StepType::class,
-                'entry_options'=>['label'=>'ajouter une étape']
+            ->add('ingredients', CollectionType::class,[
+                'entry_type'=>IngredientType::class,
+                'entry_options'=>['label'=>false],
+                'allow_add'=>true,
             ])
-//            ->add('ingredients')
         ;
     }
 
